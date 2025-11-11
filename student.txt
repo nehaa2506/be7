@@ -1,0 +1,53 @@
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.0;
+
+contract StudentData {
+    struct Student {
+        string name;
+        uint rollno;
+        uint marks;
+    }
+
+    Student[] public studentArr;
+
+    // Add a new student (name, rollno, marks)
+    function addStudent(string memory name, uint rollno, uint marks) public {
+        for (uint i = 0; i < studentArr.length; i++) {
+            if (studentArr[i].rollno == rollno) {
+                revert("Student with roll no already exists!");
+            }
+        }
+        studentArr.push(Student(name, rollno, marks));
+    }
+
+    // Display all students
+    function displayAllStudents() public view returns (Student[] memory) {
+        return studentArr;
+    }
+
+    // Get student by index
+    function getStudentByIndex(uint index) public view returns (Student memory) {
+        require(index < studentArr.length, "Index out of bound");
+        return studentArr[index];
+    }
+
+    // Get total number of students
+    function getLengthOfStudents() public view returns (uint) {
+        return studentArr.length;
+    }
+
+    // ✅ Receive function — automatically triggered when Ether is sent without data
+    receive() external payable {
+        // Accept Ether
+    }
+
+    // ✅ Fallback function — triggered when a non-existent function is called or data is sent
+    fallback() external payable {
+        // Accept Ether or handle invalid calls
+    }
+
+    // Function to check contract balance
+    function getBalance() public view returns (uint) {
+        return address(this).balance;
+    }
+}
